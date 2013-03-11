@@ -45,11 +45,16 @@ class QSslConfiguration;
 class JsNetworkRequest : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantList headers READ headers)
 
 public:
     JsNetworkRequest(QNetworkRequest* request, QObject* parent = 0);
     Q_INVOKABLE void abort();
     Q_INVOKABLE void changeUrl(const QString& url);
+    Q_INVOKABLE void addHeader(const QString& name, const QString& value);
+    Q_INVOKABLE bool removeHeader(const QString& name);
+    QVariantList headers() const;
+
 private:
     QNetworkRequest* m_networkRequest;
 };

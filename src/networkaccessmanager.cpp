@@ -80,6 +80,45 @@ void JsNetworkRequest::abort()
     }
 }
 
+void JsNetworkRequest::addHeader(const QString& name, const QString& value)
+{
+    if (m_networkRequest) {
+        m_networkRequest->setRawHeader(name.toAscii(), value.toAscii());
+    }
+}
+
+bool JsNetworkRequest::removeHeader(const QString& name)
+{
+    if (!m_networkRequest) {
+        return false;
+    }
+
+    QByteArray headerName = name.toAscii();
+    if (m_networkRequest->hasRawHeader(headerName)) {
+        // set the header to 0 (null) to remove it
+        m_networkRequest->setRawHeader(headerName, 0);
+        return true;
+    }
+
+    return false;
+}
+
+QVariantList JsNetworkRequest::headers() const
+{
+    if (!m_networkRequest) {
+        return QVariantList();
+    }
+
+    QVariantList headers;
+    foreach (QByteArray headerName, m_networkRequest->rawHeaderList()) {
+        QVariantMap header;
+        header["name"] = QString::fromAscii(headerName);
+        header["value"] = QString::fromAscii(m_networkRequest->rawHeader(headerName));
+        headers += header;
+    }
+
+    return headers;
+}
 
 void JsNetworkRequest::changeUrl(const QString& url)
 {
