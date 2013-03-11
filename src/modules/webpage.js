@@ -250,6 +250,8 @@ function decorateNewPage(opts, page) {
 
     definePageSignalHandler(page, handlers, "onResourceRequested", "resourceRequested");
 
+    definePageSignalHandler(page, handlers, "onResourceRequestedPreSetCustomHeaders", "resourceRequestedPreSetCustomHeaders");
+
     definePageSignalHandler(page, handlers, "onResourceReceived", "resourceReceived");
     
     definePageSignalHandler(page, handlers, "onResourceError", "resourceError");

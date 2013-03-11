@@ -77,6 +77,7 @@ protected:
     void handleFinished(QNetworkReply *reply, const QVariant &status, const QVariant &statusText);
 
 signals:
+    void resourceRequestedPreSetCustomHeaders(const QVariant& data, QObject *);
     void resourceRequested(const QVariant& data, QObject *);
     void resourceReceived(const QVariant& data);
     void resourceError(const QVariant& data);

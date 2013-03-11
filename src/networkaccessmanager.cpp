@@ -190,6 +190,15 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
         }
     }
 
+
+    JsNetworkRequest jsNetworkRequest(&req, this);
+    m_idCounter++;
+
+    QVariantMap data;
+    data["id"] = m_idCounter;
+    data["url"] = url.data();
+    emit resourceRequestedPreSetCustomHeaders(data, &jsNetworkRequest);
+
     // set custom HTTP headers
     QVariantMap::const_iterator i = m_customHeaders.begin();
     while (i != m_customHeaders.end()) {
@@ -197,7 +206,6 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
         ++i;
     }
 
-    m_idCounter++;
 
     QVariantList headers;
     foreach (QByteArray headerName, req.rawHeaderList()) {
@@ -207,14 +215,11 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
         headers += header;
     }
 
-    QVariantMap data;
-    data["id"] = m_idCounter;
-    data["url"] = url.data();
+    data["url"] = req.url().toEncoded().data();
     data["method"] = toString(op);
     data["headers"] = headers;
     data["time"] = QDateTime::currentDateTime();
 
-    JsNetworkRequest jsNetworkRequest(&req, this);
     emit resourceRequested(data, &jsNetworkRequest);
 
     // Pass duty to the superclass - Nothing special to do here (yet?)

@@ -462,6 +462,7 @@ signals:
     void javaScriptConsoleMessageSent(const QString &message);
     void javaScriptErrorSent(const QString &msg, const QString &stack);
     void resourceRequested(const QVariant &requestData, QObject *request);
+    void resourceRequestedPreSetCustomHeaders(const QVariant &requestData, QObject *request);
     void resourceReceived(const QVariant &resource);
     void resourceError(const QVariant &errorData);
     void urlChanged(const QUrl &url);

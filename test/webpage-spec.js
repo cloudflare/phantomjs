@@ -696,6 +696,57 @@ describe("WebPage object", function() {
         });
     });
 
+
+    it("should set allow custom headers to be changed", function() {
+        var server = require('webserver').create();
+        server.listen(12345, function(request, response) {
+            // echo received request headers in response body
+            response.write(JSON.stringify(request.headers));
+            response.close();
+        });
+
+        var url = "http://localhost:12345/foo/headers.txt?ab=cd";
+        var customHeaders = {
+            "Custom-Key" : "Custom-Value",
+            "User-Agent" : "Overriden-UA",
+            "Referer" : "Overriden-Referer"
+        };
+
+        var resourceHeaders = {
+            "User-Agent" : "Overriden-Resource-UA"
+        };
+
+        page.customHeaders = customHeaders;
+
+        page.onResourceRequestedPreSetCustomHeaders = function(requestData, request) {        
+            page.customHeaders = resourceHeaders;
+        };
+
+        var handled = false;
+        runs(function() {
+            expect(handled).toEqual(false);
+            page.open(url, function (status) {
+                expect(status == 'success').toEqual(true);
+                handled = true;
+
+                var echoedHeaders = JSON.parse(page.plainText);
+                expect(echoedHeaders["User-Agent"]).toEqual(resourceHeaders["User-Agent"]);
+                expect(echoedHeaders["Referer"]).not.toBeDefined();
+
+            });
+        });
+
+        waits(50);
+
+        runs(function() {
+            expect(handled).toEqual(true);
+            server.close();
+            page.onResourceRequestedPreSetCustomHeaders = function() {};
+        });
+
+    });
+
+
     it("should set custom headers properly", function() {
         var server = require('webserver').create();
         server.listen(12345, function(request, response) {
@@ -712,6 +763,7 @@ describe("WebPage object", function() {
         };
         page.customHeaders = customHeaders;
 
+
         var handled = false;
         runs(function() {
             expect(handled).toEqual(false);
@@ -720,8 +772,6 @@ describe("WebPage object", function() {
                 handled = true;
 
                 var echoedHeaders = JSON.parse(page.plainText);
-                // console.log(JSON.stringify(echoedHeaders, null, 4));
-                // console.log(JSON.stringify(customHeaders, null, 4));
 
                 expect(echoedHeaders["Custom-Key"]).toEqual(customHeaders["Custom-Key"]);
                 expect(echoedHeaders["User-Agent"]).toEqual(customHeaders["User-Agent"]);
