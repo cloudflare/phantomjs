@@ -127,6 +127,16 @@ void JsNetworkRequest::changeUrl(const QString& url)
     }
 }
 
+void JsNetworkRequest::setEncodedQueryString(const QString& queryString)
+{
+    if (m_networkRequest) {
+        QUrl url = m_networkRequest->url();
+        url.setEncodedQuery(QUrl::toPercentEncoding(queryString , "=&[]"));
+        m_networkRequest->setUrl(QUrl(url));
+    }
+}
+
+
 // public:
 NetworkAccessManager::NetworkAccessManager(QObject *parent, const Config *config)
     : QNetworkAccessManager(parent)
