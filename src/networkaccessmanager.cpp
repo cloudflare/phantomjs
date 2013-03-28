@@ -120,22 +120,13 @@ QVariantList JsNetworkRequest::headers() const
     return headers;
 }
 
-void JsNetworkRequest::changeUrl(const QString& url)
+void JsNetworkRequest::changeUrl(const QString& address)
 {
     if (m_networkRequest) {
-        m_networkRequest->setUrl(QUrl(url));
+        QUrl url = QUrl::fromEncoded(QByteArray(address.toAscii()));
+        m_networkRequest->setUrl(url);
     }
 }
-
-void JsNetworkRequest::setEncodedQueryString(const QString& queryString)
-{
-    if (m_networkRequest) {
-        QUrl url = m_networkRequest->url();
-        url.setEncodedQuery(QUrl::toPercentEncoding(queryString , "=&[]"));
-        m_networkRequest->setUrl(QUrl(url));
-    }
-}
-
 
 // public:
 NetworkAccessManager::NetworkAccessManager(QObject *parent, const Config *config)

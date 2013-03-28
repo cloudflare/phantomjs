@@ -54,7 +54,6 @@ public:
     Q_INVOKABLE void addHeader(const QString& name, const QString& value);
     Q_INVOKABLE bool removeHeader(const QString& name);
     QVariantList headers() const;
-    Q_INVOKABLE void setEncodedQueryString(const QString& queryString);
 private:
     QNetworkRequest* m_networkRequest;
 };
