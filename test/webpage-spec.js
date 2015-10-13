@@ -1307,6 +1307,28 @@ describe("WebPage object", function() {
             server.close();
         });
     });
+
+    it('should succeed on secure connection to IP address using host name header', function() {
+        var page = require('webpage').create();
+        var url = 'https://www.cloudflare.com';
+        var target = 'https://173.245.56.11';
+        var loaded = false;
+
+        runs(function() {
+            page.onResourceRequested = function(request, jsNetworkRequest) {
+                if (request.url.indexOf(target) == 0) {
+                    jsNetworkRequest.changeUrl(request.url.replace(url, target))
+                    jsNetworkRequest.setHeader('Host', 'www.cloudflare.com');
+                }
+            };
+            page.open(url, function(status) {
+                expect(status).toEqual('success');
+                loaded = true;
+            });
+        });
+
+        waitsFor(function() { return loaded; }, 'Can not load ' + url, 5000);
+    });
 });
 
 describe("WebPage construction with options", function () {

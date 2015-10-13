@@ -604,7 +604,12 @@ bool QHttpNetworkConnectionChannel::ensureConnection()
         if (ssl) {
 #ifndef QT_NO_OPENSSL
             QSslSocket *sslSocket = qobject_cast<QSslSocket*>(socket);
-            sslSocket->connectToHostEncrypted(connectHost, connectPort);
+            QString sniHostName = sslSocket->sslConfiguration().sniHostName();
+            if (sniHostName.isNull()) {
+                sslSocket->connectToHostEncrypted(connectHost, connectPort);
+            } else {
+                sslSocket->connectToHostEncrypted(connectHost, connectPort, sniHostName);
+            }
             if (ignoreAllSslErrors)
                 sslSocket->ignoreSslErrors();
             sslSocket->ignoreSslErrors(ignoreSslErrorsList);
