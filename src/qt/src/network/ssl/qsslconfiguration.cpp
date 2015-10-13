@@ -168,6 +168,7 @@ bool QSslConfiguration::operator==(const QSslConfiguration &other) const
         d->protocol == other.d->protocol &&
         d->peerVerifyMode == other.d->peerVerifyMode &&
         d->peerVerifyDepth == other.d->peerVerifyDepth &&
+        d->sniHostName == other.d->sniHostName &&
         d->sslOptions == other.d->sslOptions;
 }
 
@@ -201,6 +202,7 @@ bool QSslConfiguration::isNull() const
             d->privateKey.isNull() &&
             d->peerCertificate.isNull() &&
             d->peerCertificateChain.count() == 0 &&
+            d->sniHostName.isNull() &&
             d->sslOptions == ( QSsl::SslOptionDisableEmptyFragments
                               |QSsl::SslOptionDisableLegacyRenegotiation
                               |QSsl::SslOptionDisableCompression));
@@ -508,6 +510,16 @@ QList<QSslCertificate> QSslConfiguration::caCertificates() const
 void QSslConfiguration::setCaCertificates(const QList<QSslCertificate> &certificates)
 {
     d->caCertificates = certificates;
+}
+
+QString QSslConfiguration::sniHostName() const
+{
+    return d->sniHostName;
+}
+
+void QSslConfiguration::setSniHostName(const QString &hostName)
+{
+    d->sniHostName = hostName;
 }
 
 /*!

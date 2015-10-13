@@ -101,6 +101,8 @@ public:
     QSslSocket::PeerVerifyMode peerVerifyMode;
     int peerVerifyDepth;
 
+    QString sniHostName;
+
     QSsl::SslOptions sslOptions;
 
     // in qsslsocket.cpp:

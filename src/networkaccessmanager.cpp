@@ -254,6 +254,9 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     JsNetworkRequest jsNetworkRequest(&req, this);
     emit resourceRequested(data, &jsNetworkRequest);
 
+    m_sslConfiguration.setSniHostName(req.rawHeader("Host"));
+    req.setSslConfiguration(m_sslConfiguration);
+
     // Pass duty to the superclass - Nothing special to do here (yet?)
     QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
 

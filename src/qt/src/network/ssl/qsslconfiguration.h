@@ -119,6 +119,10 @@ public:
     QList<QSslCertificate> caCertificates() const;
     void setCaCertificates(const QList<QSslCertificate> &certificates);
 
+    // Override host name for SNI
+    QString sniHostName() const;
+    void setSniHostName(const QString &hostName);
+
     void setSslOption(QSsl::SslOption option, bool on);
     bool testSslOption(QSsl::SslOption option) const;
 
