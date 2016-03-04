@@ -77,6 +77,8 @@ namespace QSsl {
         SslV3,
         SslV2,
         TlsV1, // ### Qt 5: rename to TlsV1_0 or so
+        TlsV1_1,
+        TlsV1_2,
         AnyProtocol,
         TlsV1SslV3,
         SecureProtocols,

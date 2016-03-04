@@ -104,6 +104,8 @@ QT_BEGIN_NAMESPACE
     \value SslV3 SSLv3
     \value SslV2 SSLv2
     \value TlsV1 TLSv1
+    \value TlsV1_1 TLSv1.1
+    \value TlsV1_2 TLSv1.2
     \value UnknownProtocol The cipher's protocol cannot be determined.
     \value AnyProtocol The socket understands SSLv2, SSLv3, and TLSv1. This
     value is used by QSslSocket only.
