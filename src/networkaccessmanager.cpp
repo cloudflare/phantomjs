@@ -137,11 +137,13 @@ NetworkAccessManager::NetworkAccessManager(QObject *parent, const Config *config
             m_sslConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
         }
 
-        // set the SSL protocol to SSLv3 by the default
-        m_sslConfiguration.setProtocol(QSsl::SslV3);
+        // set the SSL protocol to SSLv3 or newer by default
+        m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
 
         if (config->sslProtocol() == "sslv2") {
             m_sslConfiguration.setProtocol(QSsl::SslV2);
+        } else if (config->sslProtocol() == "sslv3") {
+            m_sslConfiguration.setProtocol(QSsl::SslV3);
         } else if (config->sslProtocol() == "tlsv1") {
             m_sslConfiguration.setProtocol(QSsl::TlsV1);
         } else if (config->sslProtocol() == "tlsv1.1") {
